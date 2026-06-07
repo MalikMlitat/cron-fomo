@@ -1,2 +1,13 @@
 #!/bin/bash
-notify-send "Next Prayer" "$(curl -s "https://api.aladhan.com/v1/nextPrayerByAddress/$(date +%d-%m-%Y)?address=Nablus,PS&method=2" | jq '.data.timings' | tr -d "{}" | xargs)"
+ADDRESS="Nablus,PS"
+METHOD=2
+DATE=$(date +%d-%m-%Y)
+
+TIMINGS=$(
+    curl -s "https://api.aladhan.com/v1/nextPrayerByAddress/${DATE}?address=${ADDRESS}&method=${METHOD}" \
+    | jq '.data.timings' \
+    | tr -d "{}" \
+    | xargs
+)
+
+notify-send "Next Prayer" "$TIMINGS"
